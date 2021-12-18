@@ -1,4 +1,2 @@
-[submodule "algorithms"]
-    path = algorithms
-    url = git://github.com/sjoonb/algorithms.git
-    ignore = dirty
+[submodule "jongmanBook/apss"]
+	ignore = untracked
