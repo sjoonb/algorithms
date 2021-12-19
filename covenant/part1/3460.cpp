@@ -1,8 +1,9 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 void solve(int n) {
-	for(int i=0; i<31; ++i) {
+	for(int i=0; i<20; ++i) {
 		if(n & (1 << i))
 			printf("%d ", i);
 	}
