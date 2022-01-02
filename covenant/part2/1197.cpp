@@ -8,7 +8,6 @@ int v, e;
 // for kruskal
 priority_queue<pair<int, pair<int, int> > > pq; 
 vector<int> parent;
-vector<int> rnk;
 
 void prim() {
 
@@ -30,6 +29,9 @@ void initParent() {
 	}
 }
 
+void _union(int x, int y) {
+}
+
 int find(int x) {
 	if(parent[x] == x)
 		return x;
@@ -37,23 +39,10 @@ int find(int x) {
 		return find(parent[x]);
 }
 
-void merge(int x, int y) {
-	x = find(x), y = find(y);
-
-	if(rnk[x] > rnk[y]) {
-		parent[y] = x;
-	} else {
-		parent[x] = y;
-	}
-	if(rnk[x] == rnk[y])
-		rnk[y]++;
-}
-
 
 int kruskal() {
 	initQueue();
 	initParent();
-	rnk = vector<int>(v+1, 0);
 	int edgeCnt = 0;
 	int ret = 0;
 	while(!pq.empty() && edgeCnt < v-1) {
@@ -63,7 +52,7 @@ int kruskal() {
 		pq.pop();
 
 		if(find(u) != find(v)) {
-			merge(u, v);
+			parent[find(v)] = u;
 			ret += w;
 			edgeCnt++;
 		}
@@ -72,8 +61,6 @@ int kruskal() {
 }
 
 int main(int argc, char *argv[]) {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
 	string algorithm = argv[argc-1];
 	cin >> v >> e;
 	if(algorithm == "prim") {
