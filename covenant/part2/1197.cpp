@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <queue>
 using namespace std;
@@ -7,6 +8,7 @@ int v, e;
 
 // for kruskal
 priority_queue<pair<int, pair<int, int> > > pq; 
+vector<pair<int, pair<int, int> > > edgeList;
 vector<int> parent;
 vector<int> rnk;
 
@@ -15,12 +17,15 @@ void prim() {
 }
 
 
+
 void initQueue() {
 	for(int i=0; i<e; ++i) {
 		int u, v, w;
 		cin >> u >> v >> w;
-		pq.push(make_pair(-w, make_pair(u, v)));
+		//pq.push(make_pair(-w, make_pair(u, v)));
+		edgeList.push_back(make_pair(w, make_pair(u, v)));
 	}
+	sort(edgeList.begin(), edgeList.end());
 }
 
 void initParent() {
@@ -56,11 +61,14 @@ int kruskal() {
 	rnk = vector<int>(v+1, 0);
 	int edgeCnt = 0;
 	int ret = 0;
-	while(!pq.empty() && edgeCnt < v-1) {
-		int u = pq.top().second.first;
-		int v = pq.top().second.second;
-		int w = -pq.top().first;
-		pq.pop();
+	for(int i=0; i<edgeList.size(); ++i) {
+		if(edgeCnt >= v-1)
+			return ret;	
+		pair<int, pair<int, int> > edge = edgeList[i];
+		int u = edge.second.first;
+		int v = edge.second.second;
+		int w = edge.first;
+		//edgeList.erase(edgeList.begin());
 
 		if(find(u) != find(v)) {
 			merge(u, v);
