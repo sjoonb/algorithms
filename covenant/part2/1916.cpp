@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 
 const int INF = 1e9 + 1;
@@ -9,6 +10,9 @@ int N, M;
 
 vector<int> dist;
 
+// for floyd_warshall
+vector<vector<int> > adjc;
+
 // for bellman_ford
 vector<pair<int, pair<int, int> > > edgeList;
 
@@ -16,6 +20,15 @@ vector<pair<int, pair<int, int> > > edgeList;
 vector<vector<pair<int, int> > > graph;
 vector<bool> isVisited;
 priority_queue<pair<int, int> > pq;
+
+int floyd_warshall(int src, int dest) {
+	for(int k=1; k<=N; ++k)
+		for(int i=1; i<=N; ++i)
+			for(int j=1; j<=N; ++j) {
+				adjc[i][j] = min(adjc[i][j], adjc[i][k] + adjc[k][j]);
+			}
+	return adjc[src][dest];
+}
 
 int bellman_ford(int src, int dest) {
 	dist = vector<int>(N+1, INF);	
@@ -55,6 +68,17 @@ int dijkstra(int src, int dest) {
 	return dist[dest];
 }
 
+void initAdjc() {
+	adjc = vector<vector<int> >(N+1, vector<int>(N+1, INF));	
+	for(int i=1; i<=N; ++i)
+		adjc[i][i] = 0;
+	for(int i=0; i<M; ++i) {
+		int u, v, w;
+		cin >> u >> v >> w;
+		adjc[u][v] = min(adjc[u][v], w);
+	}
+}
+
 void initEdgeList() {
 	for(int i=0; i<M; ++i) {
 		int u, v, w;
@@ -75,8 +99,10 @@ void initGraph() {
 void initInputFor(string algo) {
 	if(algo == "dijkstra") {
 		initGraph();
-	} else {
+	} else if(algo == "bellman_ford") {
 		initEdgeList();
+	} else {
+		initAdjc();
 	}
 }
 
@@ -92,8 +118,10 @@ int main(int argc, char *argv[]) {
 	
 	if(algo == "dijkstra") {
 		cout << dijkstra(src, dest);
-	} else {
+	} else if(algo == "bellman_ford") {
 		cout << bellman_ford(src, dest);
+	} else {
+		cout << floyd_warshall(src, dest);
 	}
 	return 0;
 }
