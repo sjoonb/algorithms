@@ -11,16 +11,31 @@ void initLps() {
 	int j = 0;
 	for(int i=1; i<P.size(); ++i) {
 		while(j > 0 && P[i] != P[j]) {
-			j = P[j-1];		
+			j = lps[j-1];		
 		}
 		if(P[i] == P[j])
 			lps[i] = ++j;
 	}
-	for(int i=0; i<lps.size(); ++i)
-		cout << lps[i] << " ";
+}
+
+int kmp() {
+	int j = 0;
+	for(int i=0; i<S.size(); ++i) {
+		if(j >= P.size())
+			break;
+
+		while(j > 0 && S[i] != P[j]) {
+			j = lps[j-1];	
+		}
+		if(S[i] == P[j])
+			j++;
+	}
+	return (j == P.size()) ? 1 : 0;
 }
 
 int main() {
-	cin >> S >> P;	
+	cin >> S;
+	cin >> P;	
 	initLps();	
+	cout << kmp();
 }
