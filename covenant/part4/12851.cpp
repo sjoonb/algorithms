@@ -3,6 +3,8 @@
 using namespace std;
 
 int N, K;
+bool isVisited[100001];
+queue<pair<int, int>> q;	
 
 bool inRange(int x) {
 	if(x >= 0 && x <= 1e5)
@@ -10,66 +12,44 @@ bool inRange(int x) {
 	return false;
 }
 
-bool tryPush(queue<pair<int, int> > &q, int num, int depth, int *isVisited) {
-	if(inRange(num) && !isVisited[num]) {
-		q.push(make_pair(num, depth+1));
-		return true;
-	}
-	return false;
+void tryPush(int num, int depth) {
+	if(inRange(num) && !isVisited[num])
+		q.push(make_pair(num, depth));	
 }
 
-// bfs
-int fastest(int src) {
-	int isVisited[100001] = { false, };
-	queue<pair<int, int> > q;
-	q.push(make_pair(src, 0));
-	isVisited[src] = true;
+void solve() {
+	int fastest = 0;
+	q.push(make_pair(N, 0));
+	int ret = 0;
 	while(!q.empty()) {
-		int num = q.front().first;
-		int depth = q.front().second;
+		int num = q.front().first;	
+		int depth = q.front().second;	
 		q.pop();
-		if(num == K) {
-			return depth;
-		}
-		if(tryPush(q, num+1, depth, isVisited))
-			isVisited[num+1] = 1;
-		if(tryPush(q, num-1, depth, isVisited))
-			isVisited[num-1] = 1;
-		if(tryPush(q, num*2, depth, isVisited))
-			isVisited[num*2] = 1;
-	}
-	return -1;
-}
 
-int count(int src, int nFastest) {
-	int isVisited[100001] = { 0, };
-	queue<pair<int, int> > q;
-	q.push(make_pair(src, 0));
-	isVisited[src] = 1;
-	while(!q.empty()) {
-		int num = q.front().first;
-		int depth = q.front().second;
-		q.pop();
-		if(depth == nFastest) {
-			cout << num << endl;
-			continue;	
+		isVisited[num] = true;
+
+		if(fastest && depth >= fastest) {
+			if(depth == fastest && num == K)
+				ret++;	
+			continue;
 		}
-		if(tryPush(q, num+1, depth, isVisited))
-			isVisited[num+1] += isVisited[num];
-		if(tryPush(q, num-1, depth, isVisited))
-			isVisited[num-1] += isVisited[num];
-		if(tryPush(q, num*2, depth, isVisited))
-			isVisited[num*2] += isVisited[num];
+
+		if(!fastest && num == K) {
+			fastest = depth;
+			ret = 1;
+			continue;
+		}
+
+		tryPush(num+1, depth+1);
+		tryPush(num-1, depth+1);
+		tryPush(num*2, depth+1);
 	}
-	for(int i=0; i<=20; ++i)
-		cout << isVisited[i] << " ";
-	return isVisited[K];
+	cout << fastest << endl;
+	cout <<	ret;
 }
 
 int main() {
 	cin >> N >> K;
-	int ret1 = fastest(N);
-	int ret2 = count(N, ret1);
-//	cout << ret1 << endl;
-//	cout << ret2 << endl;
+	solve();
+	return 0;
 }
