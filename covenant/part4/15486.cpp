@@ -3,32 +3,27 @@
 #include <algorithm>
 using namespace std;
 
+#define INF 1e9 * 2
 int N;
-int schedules[1500000];
-int paid[1500000];
+int period[1500000];
+int cost[1500000];
 int dp[1500000];
 
-int dfs(int day, int sum) {
-	if(day >= N)
-		return (day == N) ? sum : 0;
+int dfs(int day) {
+	if(day >= N) 
+		return (day == N) ? 0 : -INF;
 	int &ret = dp[day];
 	if(ret != -1)
 		return ret;
-	int period = schedules[day];
-	int cost =  paid[day];
-	ret = dfs(day+period, sum+cost);
-	if(period > 1)
-		ret = max(ret, dfs(day+1, sum));
-	return ret;
+	return ret = max(dfs(day+1), dfs(day+period[day])+cost[day]);
 }
 
 int main() {
 	cin >> N;
 	for(int i=0; i<N; ++i) {
-		cin >> schedules[i];
-		cin >> paid[i];
+		cin >> period[i] >> cost[i];
 	}
 	memset(dp, -1, sizeof(dp));
-	cout << dfs(0, 0);
+	cout << dfs(0);
 	return 0;	
 }
