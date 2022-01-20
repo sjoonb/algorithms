@@ -5,13 +5,13 @@ using namespace std;
 
 int N, S, M;
 int V[50];
-int dp[50][1000];
+int dp[50][1001];
 
 int dfs(int idx, int volume) {
 	if(idx == N)
 		return volume;
 	int &ret = dp[idx][volume];
-	if(ret != -1)
+	if(ret != -2)
 		return ret;
 	ret = -1;
 	if(volume + V[idx] <= M)
@@ -22,7 +22,9 @@ int dfs(int idx, int volume) {
 }
 
 int main() {
-	memset(dp, -1, sizeof(dp));
+	for(int i=0; i<50; ++i)
+		for(int j=0; j<1001; ++j)
+			dp[i][j] = -2;
 	cin >> N >> S >> M;	
 	for(int i=0; i<N; ++i)
 		cin >> V[i];
