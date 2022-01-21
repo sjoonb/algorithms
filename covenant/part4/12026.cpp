@@ -10,20 +10,6 @@ int N;
 int dp[1000];
 int blocks[1000];
 
-int dfs(int idx, int order) {
-	if(idx == N-1)	
-		return 0;
-	int &ret = dp[idx];
-	if(ret != -1)
-		return ret;
-	ret = INF;
-	for(int next=idx+1; next<N; ++next) {
-		if((order+1) % 3 == blocks[next])
-			ret = min(ret, dfs(next, (order+1) % 3) + (int)pow(next-idx, 2));
-	}
-	return ret;
-}
-
 int encoding(char ch) {
 	switch(ch) {
 		case 'B':
@@ -36,6 +22,15 @@ int encoding(char ch) {
 	return -1;
 }
 
+int solve() {
+	dp[0] = 0;
+	for(int i=1; i<N; ++i) 
+		for(int j=i-1; j>=0; --j)
+			if(blocks[j] == (blocks[i]+3-1) % 3)
+				dp[i] = min(dp[i], dp[j] + (int)pow(i-j, 2));
+	return dp[N-1];
+}
+
 int main() {
 	cin >> N;
 	string str;
@@ -43,8 +38,11 @@ int main() {
 	for(int i=0; i<str.size(); ++i) {
 		blocks[i] = encoding(str[i]);
 	}
-	memset(dp, -1, sizeof(dp));
-	int ret = dfs(0, 0);
-	(ret == INF) ? cout << -1 : cout << ret;
-	return 0;	
+	for(int i=0; i<N; ++i)
+		dp[i] = INF;
+	int ret = solve();
+	if(ret == INF)
+		cout << -1;
+	else
+		cout << ret;
 }
