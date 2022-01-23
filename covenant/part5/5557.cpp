@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 int N;
@@ -19,9 +20,25 @@ long long solve() {
 	return dp[N-2][numbers[N-1]];
 }
 
+long long dfs(int idx, int num) {
+	if(idx == N-1)
+		return (num == numbers[N-1]) ? 1 : 0;
+	long long &ret = dp[idx][num];
+	if(ret != -1)
+		return ret;
+	ret = 0;
+	if(num + numbers[idx] <= 20)
+		ret += dfs(idx+1, num + numbers[idx]);
+	if(num - numbers[idx] >= 0)
+		ret += dfs(idx+1, num - numbers[idx]);
+	return ret;	
+}
+
 int main() {
 	cin >> N;
 	for(int i=0; i<N; ++i)
 		cin >> numbers[i];
-	cout << solve();
+	//cout << solve() << endl;
+	memset(dp, -1, sizeof(dp));
+	cout << dfs(1, numbers[0]);
 }
