@@ -25,3 +25,4 @@ int main() {
 	memset(dp, -1, sizeof(dp));
 	cout << dfs(N);	
 }
+
