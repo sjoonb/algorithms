@@ -2,3 +2,6 @@
 	path = jongmanBook/apss
 	url = git://github.com/sjoonb/algorithms.git
 	ignore = dirty
+[submodule "154Algorithm-5weeks"]
+	path = 154Algorithm-5weeks
+	url = https://github.com/Kwak-JunYoung/154Algorithm-5weeks.git
