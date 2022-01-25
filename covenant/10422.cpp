@@ -2,15 +2,15 @@
 #include <cstring>
 using namespace std;
 
-const int MOD = 1e9 + 7;
+const long long MOD = 1e9 + 7;
 
 int L;
-int dp[5001];
+long long dp[5001];
 
-int dfs(int num) {
+long long dfs(int num) {
 	if(num <= 2)
 		return 1;
-	int &ret = dp[num];
+	long long &ret = dp[num];
 	if(ret != -1)
 		return ret;
 	ret = 0;
