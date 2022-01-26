@@ -3,12 +3,12 @@
 using namespace std;
 
 int N;
-int dp[2][90];
+long long dp[2][90];
 
-int dfs(int num, int depth) {
+long long dfs(int num, int depth) {
 	if(depth == N-1)
 		return 1;
-	int ret = dp[num][depth];
+	long long &ret = dp[num][depth];
 	if(ret != -1)
 		return ret;
 	ret = 0;
