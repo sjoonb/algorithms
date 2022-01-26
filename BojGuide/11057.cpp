@@ -5,7 +5,7 @@ using namespace std;
 int N;
 int dp[10][1000];
 
-const int MOD = 1e5 + 7;
+const int MOD = 1e4 + 7;
 
 int dfs(int src, int depth) {
 	if(depth == N)
