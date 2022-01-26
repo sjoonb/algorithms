@@ -7,6 +7,17 @@ int N;
 int board[2][100000];
 int dp[3][100000];
 
+//		  cols
+
+// type 0 o 
+//		  x
+
+// type 1 x 
+//		  o
+
+// type 2 x 
+//		  x
+
 int dfs(int type, int cols) {
 	if(cols == N)
 		return 0;
@@ -14,16 +25,13 @@ int dfs(int type, int cols) {
 	if(ret != -1)
 		return ret;
 	ret = 0;
-	if(type == 0) {
-		ret = max(ret, dfs(1, cols+1) + board[type][cols]);
-		ret = max(ret, dfs(2, cols+1) + board[type][cols]);
-	} else if(type == 1) {
-		ret = max(ret, dfs(2, cols+1) + board[type][cols]);
-		ret = max(ret, dfs(0, cols+1) + board[type][cols]);
-	} else {
-		for(int nextType=0; nextType<3; ++nextType)
-			ret = max(ret, dfs(nextType, cols+1));
-	}
+	if(type == 2)
+		for(int type=0; type<3; ++type)
+			ret = max(ret, dfs(type, cols+1));
+	else
+		for(int k=1; k<=2; ++k)
+			ret = max(ret, dfs((type+k)%3, cols+1) + board[type][cols]);
+		
 	return ret;
 }
 
