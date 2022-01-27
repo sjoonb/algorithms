@@ -5,12 +5,12 @@ using namespace std;
 
 int N;
 int seq[1000];
-int dp[1000];
+int dp[1001][1000];
 
 int dfs(int num, int i) {
 	if(i == N)
 		return 0;
-	int &ret = dp[i];
+	int &ret = dp[num][i];
 	if(ret != -1)
 		return ret;
 	ret = dfs(num, i+1);
