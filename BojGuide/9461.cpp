@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int dp[101];
+long long dp[101];
 
 void precalc() {
 	dp[1] = 1;
