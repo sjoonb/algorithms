@@ -14,7 +14,9 @@ int dfs(int i) {
 	int &ret = dp[i];
 	if(ret != -1)
 		return ret;	
-	ret = dfs(i+1);
+	ret = 0;
+	if(pw[i] != 0)
+		ret += dfs(i+1);
 	if(i+2 <= N && pw[i] != 0 && pw[i] <= 2 && pw[i+1] <=6)
 		ret = (ret + dfs(i+2)) % MOD;
 	return ret;
