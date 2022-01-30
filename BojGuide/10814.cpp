@@ -3,25 +3,23 @@
 using namespace std;
 
 int N;
-tuple<int, string, int> members[100000];
+pair<int, string> members[100000];
 
-bool cmp(const tuple<int, string, int> &a, const tuple<int, string, int> &b) {
-	if(get<0>(a) == get<0>(b))
-		return get<2>(a) < get<2>(b);
-	return get<0>(a) < get<0>(b);
+bool cmp(pair<int,string> a, pair<int,string> b)
+{
+    return a.first < b.first;
 }
 
 int main() {
-	int cnt = 0;
 	cin >> N;
 	for(int i=0; i<N; ++i) {
 		int age;
 		string name;	
 		cin >> age >> name;
-		members[i] = make_tuple(age, name, cnt++);
+		members[i] = make_pair(age, name);
 	}
-	sort(members, members+N, cmp);
+	stable_sort(members, members+N, cmp);
 	for(int i=0; i<N; ++i)
-		cout << get<0>(members[i]) << " " << get<1>(members[i]) << "\n";
+		cout << members[i].first << " " << members[i].second << "\n";
 	return 0;
 }
