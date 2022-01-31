@@ -8,6 +8,8 @@ int N, K;
 int seq[SIZE];
 
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
 	cin >> N >> K;	
 	for(int i=0; i<N; ++i)
 		cin >> seq[i];
