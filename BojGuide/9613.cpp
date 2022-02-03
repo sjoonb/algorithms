@@ -10,8 +10,8 @@ int gcd(int a, int b) {
 	return gcd(b, a%b);
 }
 
-int solve() {
-	int ret = 0;	
+long long solve() {
+	long long ret = 0;	
 	for(int i=0; i<vec.size()-1; ++i)
 		for(int j=i+1; j<vec.size(); ++j)
 			ret += gcd(vec[i], vec[j]);
