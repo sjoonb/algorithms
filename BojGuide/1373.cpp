@@ -4,38 +4,26 @@
 #include <algorithm>
 using namespace std;
 
+string str;
 
-int convert(int binary) {
-	int square = 0;
+int convert(string bin) {
 	int ret = 0;
-	while(binary > 0) {
-		int bit = binary % 10;
-		ret += bit * pow(2, square++);
-		binary /= 10;
-	}
-	return ret;	
+	for(int i=0; i<3; ++i)	
+		ret += (bin[i] - '0') * pow(2, 2-i);
+	return ret;
 }
 
-void solve(int num) {
-	if(num == 0) {
-		cout << 0;
-		return;
-	}
-
-	vector<int> octal;
-	while(num > 0) {
-		int binary = num % 1000;
-		octal.push_back(convert(binary));
-		num /= 1000;	
-	}
-	reverse(octal.begin(), octal.end());
-	for(int i=0; i<octal.size(); ++i)
-		cout << octal[i];
+void solve() {
+	int n = 3 - str.size() % 3;
+	for(int i=0; i<n; ++i)
+		str.insert(0, "0");
+	for(int i=0; i<str.size(); i+=3)
+		cout << convert(str.substr(i, i+3));
+				
 }
 
 int main() {
-	int num;
-	cin >> num;	
-	solve(num);	
+	cin >> str;	
+	solve();	
 	return 0;
 }
