@@ -8,17 +8,20 @@ string str;
 
 int convert(string bin) {
 	int ret = 0;
-	for(int i=0; i<3; ++i)	
-		ret += (bin[i] - '0') * pow(2, 2-i);
+	int square = 0;
+	for(int i=bin.size()-1; i>=0; --i)	
+		ret += (bin[i] - '0') * pow(2, square++);
 	return ret;
 }
 
 void solve() {
-	int n = 3 - str.size() % 3;
-	for(int i=0; i<n; ++i)
-		str.insert(0, "0");
-	for(int i=0; i<str.size(); i+=3)
-		cout << convert(str.substr(i, i+3));
+	int r = str.size() % 3;
+
+	if(r != 0)
+		cout << convert(str.substr(0, r));
+
+	for(int i=r; i<str.size(); i+=3)
+		cout << convert(str.substr(i, 3));
 				
 }
 
