@@ -8,7 +8,7 @@ vector<vector<int> > islands;
 vector<vector<bool> > isVisited;
 
 const int dy[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
-const int dx[8] = {0, 1, 1, 1, 0, -1, -1 -1};
+const int dx[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 bool inRange(int y, int x) {
 	if(y >= 0 && y < H && x >= 0 && x < W)
