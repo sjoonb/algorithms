@@ -19,7 +19,6 @@ void dfs(int here) {
 		while(notInTeam.back() != there)
 			notInTeam.pop_back();
 		notInTeam.pop_back();
-		inCurrentCycle[here] = false;
 	} else if(!isVisited[there]) {
 		dfs(there);
 	}
@@ -38,6 +37,9 @@ int solve() {
 }
 
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 	int cases;
 	cin >> cases;
 	for(int cc=0; cc<cases; ++cc) {
