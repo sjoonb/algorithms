@@ -5,9 +5,9 @@ using namespace std;
 
 int N, M;
 
-vector<vector<bool> > maze;
-vector<vector<bool> > isVisited;
-vector<vector<int> > parent;
+bool maze[100][100];
+bool isVisited[100][100];
+int parent[100][100];
 
 const int dy[4] = {-1, 0, 1, 0};
 const int dx[4] = {0, 1, 0, -1};
@@ -45,9 +45,6 @@ int bfs() {
 
 int main() {
 	cin >> N >> M;	
-	maze = vector<vector<bool> >(N, vector<bool>(M));
-	isVisited = vector<vector<bool> >(N, vector<bool>(M, false));
-	parent = vector<vector<int> >(N, vector<int>(M, 0));
 	for(int i=0; i<N; ++i) {
 		string str;
 		cin >> str;
