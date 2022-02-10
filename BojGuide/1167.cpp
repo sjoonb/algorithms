@@ -6,38 +6,34 @@ using namespace std;
 
 int V;
 bool isVisited[100001];
-bool isInLine[100001];
+int child[100001];
 vector<vector<pair<int, int> > > graph;
 
 int dfs(int here) {
 	isVisited[here] = true;
 	int ret = 0;
-	int candNode = -1;
 	for(int i=0; i<graph[here].size(); ++i) {
 		int there = graph[here][i].first;
 		int dist = graph[here][i].second;
 		if(!isVisited[there]) {
-			int candDist = dfs(there) + dist;
-			if(candDist > ret) {
-				ret = candDist;	
-				candNode = there;
+			int cand = dfs(there) + dist;
+			if(ret < cand) {
+				ret = cand;
+				child[here] = there;
 			}
 		}
 	}
-	if(candNode != -1)
-		isInLine[candNode] = true;
 	return ret;
 }
 
 int solve() {
-	int ret = 0;
-	for(int src=1; src<=V; ++src) {
-		if(!isInLine[src]) {
-			isInLine[src] = true;
-			memset(isVisited, false, sizeof(isVisited));	
-			ret = max(ret, dfs(src)); 
-		}
+	int node = 1;
+	dfs(node);
+	while(child[node] != 0) {
+		node = child[node];
 	}
+	memset(isVisited, false,  sizeof(isVisited));
+	int ret = dfs(node);
 	return ret;
 }
 
