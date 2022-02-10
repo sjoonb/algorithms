@@ -44,7 +44,7 @@ int solve() {
 int main() {
 	cin >> V;
 	graph = vector<vector<pair<int, int> > >(V+1);
-	for(int i=0; i<5; ++i) {
+	for(int i=0; i<V; ++i) {
 		int u, v, w;	
 		cin >> u;
 		while(true) {
