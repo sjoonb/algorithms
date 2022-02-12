@@ -20,13 +20,13 @@ int numOfObj(int dist) {
 }
 
 int bisection(int lo, int hi) {
-	for(int i=0; i<200; ++i) {
+	while(lo <= hi) {
 		int mid = (lo + hi) / 2;
 		int nObj = numOfObj(mid);
 		if(nObj < C)
-			hi = mid;
+			hi = mid-1;
 		else
-			lo = mid;
+			lo = mid+1;
 	}
 	return (lo + hi) / 2;	
 }
@@ -36,6 +36,6 @@ int main() {
 	for(int i=0; i<N; ++i)
 		cin >> X[i];
 	sort(X, X+N);
-	cout << bisection(0, 2e5+1);
+	cout << bisection(0, 1e9+1);
 	return 0;	
 }
