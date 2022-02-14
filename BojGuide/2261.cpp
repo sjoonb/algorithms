@@ -20,19 +20,19 @@ int dist(const pair<int, int> &a, const pair<int, int> &b) {
 
 int solve() {
 	int minDist = dist(points[1], points[0]);
-	bst.emplace(points[0].x, points[0].y);
-	bst.emplace(points[1].x, points[1].y);
+	bst.emplace(points[0].y, points[0].x);
+	bst.emplace(points[1].y, points[1].x);
 	int j=0;
 	for(int i=2; i<N; ++i) {
 		while(j < i && pow(points[i].x - points[j].x, 2) >= minDist) {
-			bst.erase({points[j].x, points[j].y});
+			bst.erase({points[j].y, points[j].x});
 			j += 1;
 		}
-		auto begin = bst.lower_bound(make_pair(-INF, points[i].y - sqrt(minDist)));
-		auto end = bst.upper_bound(make_pair(INF, points[i].y + sqrt(minDist)));
+		auto begin = bst.lower_bound(make_pair(points[i].y - sqrt(minDist), -INF));
+		auto end = bst.upper_bound(make_pair(points[i].y + sqrt(minDist), INF));
 		for(auto it = begin; it != end; it++)
-			minDist = min(minDist, dist(points[i], {it->first, it->second}));
-		bst.emplace(points[i].x, points[i].y);
+			minDist = min(minDist, dist(points[i], {it->second, it->first}));
+		bst.emplace(points[i].y, points[i].x);
 	}
 	return minDist;	
 }
