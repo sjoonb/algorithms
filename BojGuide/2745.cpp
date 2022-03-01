@@ -5,26 +5,17 @@ using namespace std;
 string N;
 int B;
 
-int decode(char ch) {
-	if(ch >= '0' && ch <= '9')
-		return ch - '0';
-	else if(ch >= 'A' && ch <= 'Z')
-		return ch - 'A' + 10;
-	return -1;
-}
-
-int convert() {
-	int ret = 0;
-	int square = 0;
+int convert(string N, int B) {
+	int ret = 0, product = 0;
 	for(int i=N.size()-1; i>=0; --i) {
-		int num = decode(N[i]);
-		ret += num * pow(B, square++);
+		ret += (N[i] <= '9' ? N[i] - '0' : N[i] - 'A' + 10) * pow(B, product);	
+		product++;
 	}
 	return ret;
 }
 
 int main() {
 	cin >> N >> B;
-	cout << convert();
+	cout << convert(N, B);
 	return 0;
 }
