@@ -1,34 +1,29 @@
 #include <iostream>
 using namespace std;
 
-string str;
+string octal;
 
-string convert(int num) {
-	string ret = "";
-	int i = 4;
-	while(i >= 1) {
-		ret += (num/i + '0');	
-		num %= i;
-		i /= 2;	
+int oct_to_bin(int oct) {
+	int ret = 0, product = 1;
+	while(oct != 0) {
+		ret += oct % 2 * product;
+		oct /= 2;
+		product *= 10;
 	}
 	return ret;
 }
 
-void solve() {
-	string ret = "";
-	for(int i=0; i<str.size(); ++i) {
-		ret += convert(str[i] - '0');
+void convert() {
+	cout << oct_to_bin(octal[0] - '0');
+	for(int i=1; i<octal.size(); ++i) {
+		string bin = to_string(oct_to_bin(octal[i] - '0'));	
+		bin.insert(0, string(3 - bin.size(), '0'));
+		cout << bin;
 	}
-	int idx=0;
-	while(ret[idx] == '0' && idx < ret.size()-1) {
-		idx++;
-	}
-	for(int i=idx; i<ret.size(); ++i)
-		cout << ret[i];
 }
 
 int main() {
-	cin >> str;	
-	solve();
+	cin >> octal;
+	convert();
 	return 0;
 }
