@@ -1,24 +1,23 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
 using namespace std;
 
+int N, B;
 
 string convert(int N, int B) {
-	vector<int> vec;
-	while(N > 0) {
-		vec.push_back(N % B);
-		N /= B;
+	if(N == 0)
+		return "0";
+	string ret = "";
+	while(N != 0) {
+		ret += N%B + ((N%B < 10) ? '0' : 'A' - 10);
+		N /= B;	
 	}
-	string ret;
-	for(int i=vec.size()-1; i>=0; --i) {
-		ret.push_back(vec[i] < 10 ? '0' + vec[i] : 'A' + vec[i] - 10);
-	}
+	reverse(ret.begin(), ret.end());
 	return ret;
 }
 
 int main() {
-	int N, B;
-	cin >> N >> B;
+	cin >> N >> B;	
 	cout << convert(N, B);
 	return 0;
 }
