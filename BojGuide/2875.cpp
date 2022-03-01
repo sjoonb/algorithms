@@ -1,18 +1,18 @@
 #include <iostream>
-#include <algorithm>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
-int N, M, intern;
+int N, M, K;
 
 int main() {
-	cin >> N >> M >> intern;
-	int team = min(N/2, M);
-	int remain = (N - team * 2) + (M - team);
-	if(remain >= intern) {
-		cout << team;
-	} else {
-		team -= ceil((intern - remain) / 3.0);
-		cout << team;
+	cin >> N >> M >> K;	
+	int maxTeam = min(N/2, M);
+	int remain = (N + M) - maxTeam * 3;
+	K -= remain;
+	if(K > 0) {
+		maxTeam = max(0, maxTeam - (int)ceil(K/3.0));
 	}
+	cout << maxTeam;
+	return 0;
 }
