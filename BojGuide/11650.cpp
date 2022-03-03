@@ -1,11 +1,12 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
 int N;
-pair<int, int> points[100000]; 
+vector<pair<int, int> > seq;
 
-bool cmp(const pair<int, int> &a, const pair<int, int> &b) {
+bool cmp(pair<int, int> &a, pair<int, int> &b) {
 	if(a.first == b.first)
 		return a.second < b.second;	
 	return a.first < b.first;
@@ -16,10 +17,10 @@ int main() {
 	for(int i=0; i<N; ++i) {
 		int x, y;
 		cin >> x >> y;
-		points[i] = make_pair(x, y);
+		seq.push_back({x, y});
 	}
-	sort(points, points+N, cmp);
+	sort(seq.begin(), seq.end(), cmp);
 	for(int i=0; i<N; ++i)
-		cout << points[i].first << " " << points[i].second << "\n";
-	return 0;
+		cout << seq[i].first << " " << seq[i].second << "\n";
+	return 0;	
 }
