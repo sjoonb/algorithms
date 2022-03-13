@@ -1,9 +1,10 @@
 #include <iostream>
 #include <set>
+#include <algorithm>
 using namespace std;
 
-int N, M;
 set<int> bst;
+int N, M;
 
 int main() {
 	ios::sync_with_stdio(false);
@@ -17,9 +18,10 @@ int main() {
 	cin >> M;
 	for(int i=0; i<M; ++i) {
 		int num;
-		cin >> num;	
-		set<int>::iterator it = bst.find(num);
+		cin >> num;
+		auto it = bst.find(num);
 		cout << (it != bst.end() ? 1 : 0) << " ";
 	}
 	return 0;
 }
+
