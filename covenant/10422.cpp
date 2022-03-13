@@ -2,34 +2,36 @@
 #include <cstring>
 using namespace std;
 
-const long long MOD = 1e9 + 7;
+#define ll long long
+const ll MOD = 1e9 + 7;
+ll dp[5001];
 
-int L;
-long long dp[5001];
-
-long long dfs(int num) {
-	if(num <= 2)
+ll sol(int length) {
+	if(length <= 2)
 		return 1;
-	long long &ret = dp[num];
+	ll &ret = dp[length];
 	if(ret != -1)
 		return ret;
 	ret = 0;
-	for(int i=0; i <= num-2; i+=2) {
-		ret += ((dfs(i) % MOD) * (dfs(num-2-i) % MOD)) % MOD;
+	for(int i=0; i<length; i+=2) {
+		ret += sol(i) * sol(length - (i + 2)) % MOD;
+		ret %= MOD;
 	}
-	return ret %= MOD;
+	return ret;
 }
 
 int main() {
 	int cases;
 	cin >> cases;
-	memset(dp, -1, sizeof(dp));
 	for(int cc=0; cc<cases; ++cc) {
+		memset(dp, -1, sizeof(dp));
+		int L;
 		cin >> L;
-		if(L % 2 == 0)
-			cout << dfs(L) << endl;
+		if(L%2 == 1)
+			cout << 0;
 		else
-			cout << 0 << endl;
+			cout << sol(L);
+		cout << "\n";
 	}
 	return 0;
 }
