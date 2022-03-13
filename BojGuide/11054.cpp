@@ -1,54 +1,55 @@
 #include <iostream>
-#include <cstring>
+#include <vector>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
-enum Order { normal, reverse };
-
 int N;
-int seq[1000];
-int dp[2][1002][1000];
+int seq[1001];
+int dpL[1001];
+int dpR[1001];
 
-int dfs(int num, int i, Order order) {
-	if(order == Order::normal && i == N || order == Order::reverse && i == -1)
-		return 0;
-	
-
-	int &ret = dp[order][num][i];
+int longestLeft(int idx) {
+	int &ret = dpL[idx];
 	if(ret != -1)
 		return ret;
-
-	switch(order) {
-		case Order::normal:
-			ret = dfs(num, i+1, order);
-			if(seq[i] < num)
-				ret = max(ret, dfs(seq[i], i+1, order) + 1);
-			break;
-
-		case Order::reverse:
-			ret = dfs(num, i-1, order);
-			if(seq[i] < num)
-				ret = max(ret, dfs(seq[i], i-1, order) + 1);
-			break;
+	ret = 0;
+	for(int next = idx-1; next>=0; --next) {
+		if(seq[next] < seq[idx])
+			ret = max(ret, longestLeft(next) + 1);
 	}
-
 	return ret;
 }
 
+int longestRight(int idx) {
+	int &ret = dpR[idx];
+	if(ret != -1)
+		return ret;
+	ret = 0;
+	for(int next = idx+1; next<N; ++next) {
+		if(seq[next] < seq[idx])
+			ret = max(ret, longestRight(next) + 1);
+	}
+	return ret;
+}
+
+int bitonic(int idx) {
+	int a = longestLeft(idx);
+	int b = longestRight(idx);
+	return a + b + 1;
+}
+
 int main() {
-	memset(dp, -1, sizeof(dp));
+	memset(dpL, -1, sizeof(dpL));
+	memset(dpR, -1, sizeof(dpR));
 	cin >> N;
-	for(int i=0; i<N; ++i)
-		cin >> seq[i];
-
-	int a = dfs(1001, 0, Order::normal);
-	int b = dfs(1001, N-1, Order::reverse);
-
-	int ret = 0;
 	for(int i=0; i<N; ++i) {
-		ret = max(ret, dp[Order::normal][1001][i] + dp[Order::reverse][1001][i] - 1);
+		cin >> seq[i];
+	}
+	int ret = 1;
+	for(int i=0; i<N; ++i) {
+		ret = max(ret, bitonic(i));
 	}
 	cout << ret;
-
 	return 0;
 }
