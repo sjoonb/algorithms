@@ -1,56 +1,65 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cstring>
 using namespace std;
 
 int V;
-bool isVisited[100001];
-int child[100001];
-vector<vector<pair<int, int> > > graph;
+typedef vector<vector<pair<int, int> > > Graph;
+Graph graph;
+vector<bool> isVisited;
+vector<int> dist;
 
-int dfs(int here) {
+void dfs(int here) {
 	isVisited[here] = true;
-	int ret = 0;
 	for(int i=0; i<graph[here].size(); ++i) {
 		int there = graph[here][i].first;
-		int dist = graph[here][i].second;
+		int cost = graph[here][i].second;
 		if(!isVisited[there]) {
-			int cand = dfs(there) + dist;
-			if(ret < cand) {
-				ret = cand;
-				child[here] = there;
-			}
+			dist[there] = dist[here] + cost;
+			dfs(there);
 		}
 	}
-	return ret;
-}
-
-int solve() {
-	int node = 1;
-	dfs(node);
-	while(child[node] != 0) {
-		node = child[node];
-	}
-	memset(isVisited, false,  sizeof(isVisited));
-	int ret = dfs(node);
-	return ret;
 }
 
 int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(nullptr);
 	cin >> V;
-	graph = vector<vector<pair<int, int> > >(V+1);
+	graph = Graph(V+1);
+	isVisited = vector<bool>(V+1, false);
+	dist = vector<int>(V+1, 0);
 	for(int i=0; i<V; ++i) {
-		int u, v, w;	
+		int u, v, w;
 		cin >> u;
-		while(true) {
-			cin >> v;	
-			if(v == -1)
-				break;
+		v = 0;
+		cin >> v;
+		while(v != -1) {
 			cin >> w;
-			graph[u].push_back(make_pair(v, w));
+			graph[u].push_back({v, w});
+			graph[v].push_back({u, w});
+			cin >> v;
 		}
 	}
-	cout << solve();
-	return 0;	
+	dfs(graph[1][0].first);
+	int node = -1, maxVal = 0;
+	for(int i=1; i<=V; ++i) {
+		if(dist[i] >= maxVal) {
+			node = i;
+			maxVal = dist[i];
+		}
+	}
+	isVisited = vector<bool>(V+1, false);
+	dist = vector<int>(V+1, 0);
+	dfs(node);
+	int ret = 0;
+	for(int i=1; i<=V; ++i)
+		ret = max(ret, dist[i]);
+	cout << ret;
+	return 0;
+
 }
+
+
+
+
+
