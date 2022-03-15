@@ -1,64 +1,48 @@
 #include <iostream>
 #include <queue>
 #include <cstring>
-#include <algorithm>
 using namespace std;
 
-int parent[10001];
-char op[10001];
+bool isVisited[10000];
+string method = "DSLR";
 
-void D(int here, queue<int> &q) {
-	int there = (here * 2) % (int)1e4;
-	if(parent[there] != -1)
-		return;
-	parent[there] = here;
-	op[there] = 'D';
-	q.push(there);
-}
-
-void S(int here, queue<int> &q) {
-	int there = here - 1;
-	if(there < 0)
-		there = 9999;
-	if(parent[there] != -1)
-		return;
-	parent[there] = here;
-	op[there] = 'S';
-	q.push(there);
-}
-
-void L(int here, queue<int> &q) {
-	int there = (here % 1000) * 10 + (here / 1000);
-	if(parent[there] != -1)
-		return;
-	parent[there] = here;
-	op[there] = 'L';
-	q.push(there);
-}
-
-void R(int here, queue<int> &q) {
-	int there = (here % 10) * 1000 + (here / 10);
-	if(parent[there] != -1)
-		return;
-	parent[there] = here;
-	op[there] = 'R';
-	q.push(there);
-}
-
-void bfs(int start, int dest) {
-	queue<int> q;
-	q.push(start);
-	parent[start] = start;
-	while(!q.empty()) {
-		int here = q.front();
-		q.pop();
-		if(here == dest)
-			return;
-		D(here, q);
-		S(here, q);
-		L(here, q);
-		R(here, q);
+void command(queue<pair<int, string> > &q, int num, string cmd, char ch) {
+	switch(ch) {
+		case 'D':
+			num = num*2 % (int)1e4;
+			break;	
+		case 'S':
+			num -= 1;
+			if(num < 0)
+				num = 9999;
+			break;
+		case 'L':
+			num = (num % 1000) * 10 + (num / 1000);
+			break;
+		case 'R': 
+			num = (num % 10) * 1000 + num / 10;
+			break;
 	}
+	if(isVisited[num])
+		return;
+	isVisited[num] = true;	
+	cmd += ch;
+	q.push({num, cmd});
+}
+
+string bfs(int src, int dest) {
+	queue<pair<int, string> > q;
+	q.push({src, ""});
+	while(!q.empty()) {
+		int num = q.front().first;
+		string cmd = q.front().second;;
+		q.pop();
+		if(num == dest)
+			return cmd;
+		for(int i=0; i<4; ++i)
+			command(q, num, cmd, method[i]); 
+	}
+	return "";
 }
 
 int main() {
@@ -67,18 +51,10 @@ int main() {
 	int cases;
 	cin >> cases;
 	for(int cc=0; cc<cases; ++cc) {
-		int A, B;
-		cin >> A >> B;
-		memset(parent, -1, sizeof(parent));
-		bfs(A, B);
-		int here = B;
-		string ret;
-		while(parent[here] != here) {
-			ret += op[here];
-			here = parent[here];
-		}
-		reverse(ret.begin(), ret.end());
-		cout << ret << "\n";
+		memset(isVisited, false, sizeof(isVisited));
+		int src, dest;
+		cin >> src >> dest;
+		cout << bfs(src, dest) << "\n";
 	}
-	return 0;	
+	return 0;
 }
