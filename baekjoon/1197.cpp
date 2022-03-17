@@ -1,61 +1,56 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 #include <queue>
 using namespace std;
 
-struct Edge {
-	int w, u, v;	
-};
-
-struct Compare {
-	bool operator()(Edge &a, Edge &b) {
-		return a.w > b.w;
-	}
-};
-
-
+typedef vector<vector<pair<int,int> > > Graph;
+typedef pair<int, pair<int, int> > Edge;
 int V, E;
-priority_queue<Edge, vector<Edge>, Compare> pq;
+priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
+Graph graph;
 vector<int> parent;
 
 int find(int x) {
 	if(parent[x] == x)
 		return x;
-	return parent[x] = find(parent[x]);	
+	return parent[x] = find(parent[x]);
 }
 
-void _union(int x, int y) {
-	parent[x] = y;
+void _union(int a, int b) {
+	parent[a] = b;
 }
 
 int kruskal() {
 	int ret = 0;
-	int nNode = 0;
-	while(!pq.empty() && nNode < V-1) {
-		Edge edge = pq.top();
+	int nEdge = 0;
+	while(!pq.empty() && nEdge < V-1) {
+		int w = pq.top().first;
+		int u = pq.top().second.first;
+		int v = pq.top().second.second;
 		pq.pop();
-		int a = find(edge.u);
-		int b = find(edge.v);
-		if(a != b) {
-			_union(a, b);	
-			nNode++;
-			ret += edge.w;
-		}
+		int a = find(u);
+		int b = find(v);
+		if(a == b)
+			continue;
+		_union(a, b);
+		ret += w;
+		nEdge++;
 	}
-	return ret;	
+	return ret;
 }
 
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
 	cin >> V >> E;
+	graph = Graph(V+1);
 	parent = vector<int>(V+1);
 	for(int i=1; i<=V; ++i)
 		parent[i] = i;
 	for(int i=0; i<E; ++i) {
-		int u, v, w;	
+		int u, v, w;
 		cin >> u >> v >> w;
-		pq.push({w, u, v});
+		graph[u].push_back({v, w});
+		graph[v].push_back({u, w});
+		pq.push({w, {u, v}});
 	}
 	cout << kruskal();
 	return 0;
