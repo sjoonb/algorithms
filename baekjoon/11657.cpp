@@ -2,49 +2,46 @@
 #include <vector>
 using namespace std;
 
-struct Edge {
-	int u, v, w;
-};
-
-#define INF 987654321
+#define INF (1 << 30)
 #define ll long long
 
-int N, M;
+typedef vector<pair<int, pair<int, int> > > EdgeList; // w, u, v;
+EdgeList edgeList;
 vector<ll> dist;
-vector<Edge> edgeList;
+int N, M;
 
 bool bellman() {
 	dist[1] = 0;
-	for(int i=0; i<N; ++i) {
+	for(int i=0; i<N; ++i)
 		for(int j=0; j<M; ++j) {
-			int u = edgeList[j].u;	
-			int v = edgeList[j].v;	
-			int w = edgeList[j].w;	
+			int w = edgeList[j].first;
+			int u = edgeList[j].second.first;
+			int v = edgeList[j].second.second;
 			if(dist[u] != INF && dist[v] > dist[u] + w) {
-				dist[v] = dist[u] + w;
 				if(i == N-1)
 					return false;
+				dist[v] = dist[u] + w;
 			}
-
 		}
-	}
 	return true;
 }
 
 int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
 	cin >> N >> M;
+	edgeList = EdgeList(M);
 	dist = vector<ll>(N+1, INF);
 	for(int i=0; i<M; ++i) {
 		int u, v, w;
 		cin >> u >> v >> w;
-		edgeList.push_back({u, v, w});
+		edgeList[i] = {w, {u, v}};
 	}
-	if(bellman() == true) {
+	if(bellman()) {
 		for(int i=2; i<=N; ++i)
-			cout << (dist[i] == INF ? -1 : dist[i]) << "\n";
+			cout << (dist[i] != INF ? dist[i] : -1) << "\n";
 	} else {
 		cout << -1;
 	}
-	return 0;	
+	return 0;
 }
-
