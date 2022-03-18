@@ -1,54 +1,56 @@
 #include <iostream>
 #include <vector>
-#include <cstring>
+#include <queue>
 using namespace std;
 
 int V, E;
-bool isVisited[20001];
-int colors[20001];
-vector<vector<int> > graph;
+typedef vector<vector<int> > Graph;
+Graph graph;
+vector<int> colors;
 
-bool dfs(int here, int color) {
-	isVisited[here] = true;
-	colors[here] = color;
-	for(int i=0; i<graph[here].size(); ++i) {
-		int there = graph[here][i];
-		if(isVisited[there]) {
-			if(colors[there] == colors[here])
-				return false;
-		} else  {
-			if(!dfs(there, color ? 0 : 1))
-				return false;
+bool bfs(int src) {
+	queue<pair<int, int> > q;
+	colors[src] = 0;
+	q.push({src, colors[src]}); // node, color
+	while(!q.empty()) {
+		int here = q.front().first;
+		int color = q.front().second;
+		q.pop();
+		for(int i=0; i<graph[here].size(); ++i) {
+			int there = graph[here][i];
+			if(colors[there] == -1) {
+				colors[there] = (color ? 0 : 1);
+				q.push({there, colors[there]});	
+			} else if(colors[there] == color) {
+				return false;	
+			}
 		}
 	}
-	return true;	
+	return true;
 }
 
-bool solve() {
-	for(int i=1; i<=V; ++i) 
-		if(!isVisited[i]) {
-			if(!dfs(i, 0))
+bool isBipartite() {
+	for(int i=1; i<=V; ++i)
+		if(colors[i] == -1)
+			if(bfs(i) == false)
 				return false;
-		}
-	return true;	
+	return true;
 }
 
 int main() {
 	int cases;
 	cin >> cases;
 	for(int cc=0; cc<cases; ++cc) {
-		memset(isVisited, false, sizeof(isVisited));
-		memset(colors, -1, sizeof(colors));
 		cin >> V >> E;
-		graph = vector<vector<int> >(V+1);
+		graph = Graph(V+1);
+		colors = vector<int>(V+1, -1);
 		for(int i=0; i<E; ++i) {
 			int u, v;
 			cin >> u >> v;
 			graph[u].push_back(v);
 			graph[v].push_back(u);
-		}
-		cout << (solve() == true ? "YES" : "NO");
-		cout << "\n";
+		}	
+		cout << (isBipartite() ? "YES" : "NO") << "\n";
 	}
-	return 0;	
+	return 0;
 }
